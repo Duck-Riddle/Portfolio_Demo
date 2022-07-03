@@ -1,0 +1,146 @@
+﻿@page "{currentpage:int?}"
+@using WebApp.Data.Enums
+@model WebApp.Pages.Projects.ToDoListModel
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<h1>@Model.CurrentPage</h1>
+
+<div class="m-4">
+    <form method="post" asp-page-handler="Create">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="input-group my-3">
+                    <span class="input-group-text">Title</span>
+                    <input class="form-control" placeholder="Something to do..." asp-for="SelectedTask.Title"/>
+                </div>
+                <span class="text-danger" asp-validation-for="SelectedTask.Title"></span>
+            </div>
+
+            <div class="col">
+                <div class="input-group my-3">
+                    <select class="form-select " asp-for="SelectedTask.Priority" asp-items="Html.GetEnumSelectList<Priority>()"></select>
+                    <span class="input-group-text">Priority</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="input-group my-3">
+                    <textarea maxlength="256" class="form-control" style="resize: none; height: 7em" placeholder="Some more details about current task..." asp-for="SelectedTask.Description"></textarea>
+                    <span class="input-group-text">Description</span>
+                </div>
+                <span class="text-danger" asp-validation-for="SelectedTask.Description"></span>
+            </div>
+
+            <div class="col">
+                <div class="input-group my-3">
+                    <span class="input-group-text">Deadline</span>
+                    <input class="form-control" asp-for="SelectedTask.Deadline"/>
+                </div>
+                <span class="text-danger" asp-validation-for="SelectedTask.Deadline"></span>
+                <div class="my-3">
+                    <input type="submit" class="btn btn-secondary btn-lg" value="Add Task"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-responsive-sm">
+    <table class="table table-responsive-sm table-dark table-striped table-hover">
+        <thead>
+        <tr>
+            <th width="4%"></th>
+            <th width="50%">Title</th>
+            <th width="15%">Created At &nbsp;<i class="bi bi-calendar2-plus"></i></th>
+            <th width="15%">Deadline &nbsp;<i class="bi bi-calendar2-x"></i></th>
+            <th width="8%">Priority &nbsp;<i class="bi bi-clipboard-data"></i></th>
+            <th width="3%"></th>
+            <th width="3%"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var task in Model.TaskToDoList)
+        {
+            <tr>
+                <td class="align-middle">
+                    @if (task.IsCompleted)
+                    {
+                        <form method="post" asp-page-handler="Complete" asp-route-id="@task.Id">
+                            <button type="submit" class="btn">
+                                <i class="bi bi-check-circle text-success ms-1"></i>
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="Complete" asp-route-id="@task.Id">
+                            <button type="submit" class="btn">
+                                <i class="bi bi-circle text-info ms-1"></i>
+                            </button>
+                        </form>
+                    }
+                </td>
+                @if (string.IsNullOrWhiteSpace(task.Description))
+                {
+                    <td class="align-middle">
+                        <h5 style="word-wrap: break-word;min-width: 160px;max-width: 600px;">@task.Title</h5>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <h5 style="word-wrap: break-word;min-width: 160px;max-width: 600px;">@task.Title</h5>
+                        <p style="word-wrap: break-word;min-width: 160px;max-width: 600px;">@task.Description</p>
+                    </td>
+                }
+
+                <td class="align-middle">@task.Created</td>
+
+                <td class="align-middle">@task.Deadline</td>
+
+                @switch (task.Priority)
+                {
+                    case Priority.Low:
+                        <td class="align-middle">
+                            <i class="bi bi-dash-circle  ms-4"></i>
+                        </td>
+                        break;
+                    case Priority.Normal:
+                        <td class="align-middle">
+                            <i class="bi bi-exclamation-circle ms-4"></i>
+                        </td>
+                        break;
+                    case Priority.High:
+                        <td class="align-middle">
+                            <i class="bi bi-exclamation-circle-fill ms-4 text-warning"></i>
+                        </td>
+                        break;
+                    default:
+                        <td class="align-middle">
+                            <i class="bi bi-question-circle ms-4"></i>
+                        </td>
+                        break;
+                }
+
+                <td class="align-middle">
+                    <form method="post" asp-page-handler="Edit" asp-route-id="@task.Id">
+                        <button type="submit" class="btn btn-outline-primary">
+                            <i class="bi bi-pencil-square text-primary"></i>
+                        </button>
+                    </form>
+                </td>
+
+                <td class="align-middle">
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@task.Id">
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="bi bi-trash text-danger"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

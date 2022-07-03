@@ -1,0 +1,66 @@
+﻿@using Data.Models
+@{
+    var projects = LayoutDataHelper.ProjectsLinks;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Portfolio</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/dist/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+</head>
+<body style="background: #333">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-page="/Index">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @*Navigation Items*@
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-page="/CurriculumVitae">Curriculum Vitae</a>
+                        </li>
+                        @*Dropdown with links in navigation*@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" aria-expanded="false">@LayoutDataHelper.Project.Label</a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                @foreach (var project in projects)
+                                {
+                                    <li><a class="dropdown-item" asp-page="@project.Path">@project.Label</a></li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                    <partial name="_LoginStatusPartial"/>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3 text-light">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted bg-dark">
+        <div class="container">
+            &copy; 2022 - Daniel Kawczyński - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

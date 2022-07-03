@@ -1,0 +1,71 @@
+﻿@page
+@model WebApp.Pages.Auth.IndexModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="container">
+    <div class="row">
+        @*Sign in section*@
+        <div class="col mx-2">
+            <div class="container">
+                <h2>Sign In</h2>
+                <p></p>
+                <form method="post" asp-page-handler="Login">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Credentials.Identity"></label>
+                        <input class="form-control" asp-for="Credentials.Identity"/>
+                        <span class="text-danger" asp-validation-for="Credentials.Identity"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Credentials.Secret"></label>
+                        <input class="form-control" type="password" asp-for="Credentials.Secret"/>
+                        <span class="text-danger" asp-validation-for="Credentials.Secret"></span>
+                    </div>
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" asp-for="Credentials.RememberMe"/>
+                        <label class="form-check-label" asp-for="Credentials.RememberMe"></label>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-outline-primary" value="Login"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @*Sign Up section*@
+        <div class="col mx-2">
+            <div class="container">
+                <h2>Sign Up</h2>
+                <p></p>
+                <form method="post" asp-page-handler="Register">
+                    <div class="mb-2">
+                        <label class="form-label" asp-for="Credentials.Alias"></label>
+                        <input class="form-control" placeholder="Please call me:" asp-for="Credentials.Alias"/>
+                        <span class="text-danger" asp-validation-for="Credentials.Alias"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" asp-for="Credentials.Identity"></label>
+                        <input class="form-control" placeholder="example@@email.com" type="email" asp-for="Credentials.Identity"/>
+                        <span class="text-danger" asp-validation-for="Credentials.Identity"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" asp-for="Credentials.Secret"></label>
+                        <input class="form-control" type="password" asp-for="Credentials.Secret"/>
+                        <span class="text-danger" asp-validation-for="Credentials.Secret"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" asp-for="Credentials.RepeatSecret"></label>
+                        <input class="form-control" type="password" asp-for="Credentials.RepeatSecret"/>
+                        <span class="text-danger" asp-validation-for="Credentials.RepeatSecret"></span>
+                        <span class="text-danger">@Html.ValidationMessage("PasswordRepeat")</span>
+                    </div>
+                    <div class="mt-4">
+                        <input type="submit" class="btn btn-outline-primary" value="Register"/>
+                    </div>
+                </form>
+            </div>
+            <p class="text-danger my-3">* This webside is made by amateur programmer so for your own safety don't provide personal data or password that you use somewhere else!</p>
+            <div class="text-danger" asp-validation-summary="All"></div>
+        </div>
+    </div>
+</div>
